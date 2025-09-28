@@ -1,5 +1,5 @@
 from urllib.parse import urlparse
-import httpx
+import httpx  # TODO: Will be used in fetch_repo_zip method
 import ast
 from io import BytesIO
 from zipfile import ZipFile
@@ -55,6 +55,18 @@ class GitHubParser:
         # - If the path doesn't contain at least 2 pieces, there is a problem, and we should raise an error in that case.
         # - The first part of the path is the owner, and the second part is the repo name. In the specific case the URL is passed with the .git suffix, we need to remove it. For example, from https://github.com/huggingface/transformers.git , we should extract huggingface and transformers.
         # - If the path contains at least 4 parts and the third part is equal to tree or blob, then the fourth part is the reference. In any other cases, let's set the reference value to None.
+        try:
+            parsed_url = urlparse(url)
+            if parsed_url.netloc != "github.com":
+                raise ValueError("Invalid GitHub URL")
+            path = parsed_url.path.split("/")
+            if len(path) < 2:
+                raise ValueError("Invalid GitHub URL")
+            owner, repo = path[1], path[2]
+            if len(path) >= 4 and path[3] in ["tree", "blob"]:
+                ref = path[4]
+        except Exception as e:
+            raise ValueError(f"Invalid GitHub URL: {e}")
         return owner, repo, ref
     
     def fetch_repo_zip(self, timeout: float = 60.0) -> bytes:
@@ -195,7 +207,7 @@ class GitHubParser:
 
         for node in tree.body:  # top-level order
             # TODO: Use slice_node to extract the lines of the current node
-            node_text = None
+            node_text = slice_node(node)
             # TODO: Classify the current top-level node:
             #  - Function / AsyncFunction  -> treat as an atomic code chunk.
             #  - Class                     -> split into bounded parts via split_class(node).
