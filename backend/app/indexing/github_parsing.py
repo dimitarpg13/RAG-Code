@@ -48,7 +48,7 @@ class GitHubParser:
             ValueError: If URL is not a valid GitHub URL or doesn't contain owner/repo
         """
         owner, repo, ref = '', '', None
-        # TODO: Implement the parse_url function:
+        # Implement the parse_url function:
         # - Use the urlparse function to parse the URL.
         # - Make sure the netloc attribute is equal to "github.com". Raise an error if it is not the case
         # - Split the path by the slash character "/".
