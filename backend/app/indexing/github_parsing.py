@@ -59,12 +59,12 @@ class GitHubParser:
             parsed_url = urlparse(url)
             if parsed_url.netloc != "github.com":
                 raise ValueError("Invalid GitHub URL")
-            path = parsed_url.path.split("/")
+            path = parsed_url.path.strip("/").split("/")
             if len(path) < 2:
                 raise ValueError("Invalid GitHub URL")
-            owner, repo = path[1], path[2]
-            if len(path) >= 4 and path[3] in ["tree", "blob"]:
-                ref = path[4]
+            owner, repo = path[0], path[1]
+            if len(path) >= 4 and path[2] in ["tree", "blob"]:
+                ref = path[3]
         except Exception as e:
             raise ValueError(f"Invalid GitHub URL: {e}")
         return owner, repo, ref
