@@ -95,8 +95,13 @@ class GitHubParser:
 
         with httpx.Client(follow_redirects=True, timeout=timeout) as client:
             for ref in refs_to_try:
-                url = f"{BASE_URL}/{self.owner}/{self.repo}/{ref}.zip"
-                response = client.get(url)
+                url = f"{BASE_URL}/{self.owner}/{self.repo}/zip/{ref}"
+                print(f"URL: {url}")
+                try:
+                  response = client.get(url)
+                except Exception as e:
+                  print(e)
+                print(f"Response status code: {response.status_code}")
                 if response.status_code == 200:
                     return response.content
         raise ConnectionError("Could not download ZIP (ref not found or repo private).")
