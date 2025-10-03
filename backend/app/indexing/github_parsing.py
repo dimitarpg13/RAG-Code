@@ -125,7 +125,7 @@ class GitHubParser:
         files = []
         with ZipFile(BytesIO(zip_bytes)) as zip_file:
             
-            # TODO: use the os.path.commonpath function to extract the common root path for every file in the zip file. 
+            # use the os.path.commonpath function to extract the common root path for every file in the zip file. 
             # You can iterate through all the filenames by using:
             # [i.filename for i in zip_file.infolist()]
             # The prefix variable will be the result of that common root path + "/". 
