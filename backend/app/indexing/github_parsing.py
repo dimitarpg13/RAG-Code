@@ -1,4 +1,5 @@
 from urllib.parse import urlparse
+import os
 import httpx  # TODO: Will be used in fetch_repo_zip method
 import ast
 from io import BytesIO
@@ -85,11 +86,19 @@ class GitHubParser:
             Uses the repository's owner, repo, and ref attributes set during initialization.
             If no ref is specified, tries 'main' then 'master' branches.
         """
-        # TODO: Implement fetch_repo_zip function:
+        # Implement fetch_repo_zip function:
         # - If the reference is None, try 'master' and 'main', otherwise use the one existing one.
         # - Construct the URL from the BASE_URL (https://codeload.github.com), the owner, the repo name, and the different references. 
         # - Instantiate the httpx.Client client with follow_redirects=True and timeout, and call client.get on the URL.
         # - If the response from the HTTP call is not 200 (success), then raise a connection error.
+        refs_to_try = ['master', 'main'] if self.ref is None else [self.ref]
+
+        with httpx.Client(follow_redirects=True, timeout=timeout) as client:
+            for ref in refs_to_try:
+                url = f"{BASE_URL}/{self.owner}/{self.repo}/{ref}.zip"
+                response = client.get(url)
+                if response.status_code == 200:
+                    return response.content
         raise ConnectionError("Could not download ZIP (ref not found or repo private).")
     
     def get_files_from_zip(self, zip_bytes: bytes, max_bytes: int = MAX_FILE_BYTES) -> list[File]:
@@ -115,12 +124,13 @@ class GitHubParser:
             # You can iterate through all the filenames by using:
             # [i.filename for i in zip_file.infolist()]
             # The prefix variable will be the result of that common root path + "/". 
-            prefix = None
+            prefix = os.path.commonpath([i.filename for i in zip_file.infolist()]) + "/"
+
             for info in zip_file.infolist():
                 text = None
                 path = None
                 extension = None
-                # TODO: Filter the files by ignoring:
+                # Filter the files by ignoring:
                 # - The directories: info.is_dir()
                 # - The file names that do not start with the prefix.
                 # - The files with more data than MAX_FILE_BYTES: info.file_size > max_bytes.
@@ -136,7 +146,19 @@ class GitHubParser:
                 #         text = raw.decode("utf-8").strip()
                 #     except UnicodeDecodeError:
                 #         text = raw.decode("latin-1", errors="replace").strip()
-        
+                if not info.is_dir() and info.filename.startswith(prefix) and info.file_size <= max_bytes and os.path.splitext(info.filename)[1].lower() in DEFAULT_EXTS:
+                    with zip_file.open(info) as f:
+                        raw = f.read()
+                        try:
+                            text = raw.decode("utf-8").strip()
+                        except UnicodeDecodeError:
+                            text = raw.decode("latin-1", errors="replace").strip()
+                        
+                        name = info.filename[len(prefix):]
+                        extension = os.path.splitext(name)[1].lower()
+                        files.append(File(content=text, path=name, extension=extension))
+
+
         # Return a list of File data structures.
         return files
     
