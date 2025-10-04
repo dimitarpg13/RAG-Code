@@ -264,14 +264,16 @@ class GitHubParser:
                 
                
         # Emit leftover (may be < min_lines)
-        # TODO: If there are some leftovers in previous_text, add a new CodeElement to code_elements.
+        # If there are some leftovers in previous_text, add a new CodeElement to code_elements.
         if len(previous_text) > 0:
-            code_elements.append(CodeElement(header=previous_text, content=node_text))
-            previous_text = []
-
-
-        # If no defs/classes at all, return whole file as one element with whatever header we collected
-        # TODO: If there are no code elements at this point, this means there are only header elements. In this case, add the whole file content without any header to a CodeElement.
+            code_elements.append(CodeElement(
+                header=''.join(headers).strip() if headers else None,
+                source=source,
+                extension=file.extension,
+                description='',
+                text=''.join(previous_text).strip()
+            )
+        )
 
         return code_elements
     
