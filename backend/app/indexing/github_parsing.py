@@ -338,10 +338,18 @@ class GitHubParser:
             Processes .py files using AST parsing and .md files using chunk-based parsing.
             Filters files based on DEFAULT_EXTS and MAX_FILE_BYTES limits.
         """
-        # TODO: The main function of the class
+        # The main function of the class
         # - Fetch the repo byte data
         # - Extract the files from the zip file
         # - If the extension is .py, then we should extract the code, and if it .md, we should extract the markdown
         # - Return all the code elements from the repo
         code_elements = []         
+        zip_bytes = self.fetch_repo_zip()
+        files = self.get_files_from_zip(zip_bytes)
+        for file in files:
+            if file.extension == '.py':
+                code_elements.extend(self.parse_code(file))
+            elif file.extension == '.md':
+                code_elements.extend(self.parse_markdown(file))
         return code_elements
+
