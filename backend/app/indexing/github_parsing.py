@@ -233,33 +233,42 @@ class GitHubParser:
         previous_text: list[str] = []
 
         for node in tree.body:  # top-level order
-            # TODO: Use slice_node to extract the lines of the current node
+            # Use slice_node to extract the lines of the current node
             node_text = slice_node(node)
-            # TODO: Classify the current top-level node:
+            # Classify the current top-level node:
             #  - Function / AsyncFunction  -> treat as an atomic code chunk.
             #  - Class                     -> split into bounded parts via split_class(node).
             #  - Anything else             -> treat as header (top-level non-def/class code).
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                # TODO: If it's a Function/AsyncFunction:
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                # If it's a Function/AsyncFunction:
                 # - If adding this function to `previous_text` would exceed `max_lines_per_elem`,
                 # emit `previous_text` as a CodeElement and clear it (do NOT split the function).
                 # - Append the function's lines (`node_text`) to `previous_text` (prefix with "\n" if needed).
-                pass
-            elif isinstance(node, ast.ClassDef):
-                # TODO: If it's a Class:
-                # - Call `split_class(node)` to get a list of class parts. For each `part`:
-                # * If adding `part` to `previous_text` would exceed `max_lines_per_elem`,
-                # emit `previous_text` as a CodeElement and clear it.
-                # * Append `part` to `previous_text` (prefix with "\n" if needed).
-                # (Note: `split_class` never splits methods; it repeats `class Name:` and uses '...' to mark continuation.)
-                pass
+                if previous_text and len(previous_text) + len(node_text) > max_lines_per_elem:
+                    code_elements.append(
+                        CodeElement(
+                            header=''.join(headers).strip() if headers else None,
+                            source=source,
+                            extension=file.extension,
+                            description='',
+                            text=''.join(previous_text).strip()
+                        )
+                    )
+                    previous_text = []
+                previous_text = previous_text + ["\n"] + node_text if previous_text else node_text
+               
             else:
-                # TODO: If it's neither function nor class:
+                # If it's neither function nor class:
                 # - Extend `headers` with `node_text` (we include all top-level non-def/class lines in the header).
-                pass
-
+                headers.extend(node_text)
+                
+               
         # Emit leftover (may be < min_lines)
         # TODO: If there are some leftovers in previous_text, add a new CodeElement to code_elements.
+        if len(previous_text) > 0:
+            code_elements.append(CodeElement(header=previous_text, content=node_text))
+            previous_text = []
+
 
         # If no defs/classes at all, return whole file as one element with whatever header we collected
         # TODO: If there are no code elements at this point, this means there are only header elements. In this case, add the whole file content without any header to a CodeElement.
