@@ -306,17 +306,25 @@ class GitHubParser:
         lines = file.content.splitlines(keepends=True)
         num_lines = len(lines)
 
-        # TODO: Clamp overlap_lines to ensure that it is between 0 and min_lines_per_elem - 1.
-        overlap_lines = None
-        # TODO: Implement the step variable as min_lines_per_elem - overlap_lines.
-        step = None
+        # Clamp overlap_lines to ensure that it is between 0 and min_lines_per_elem - 1.
+        overlap_lines = max(0, min(overlap_lines, min_lines_per_elem - 1))
+        # Implement the step variable as min_lines_per_elem - overlap_lines.
+        step = max(1, min_lines_per_elem - overlap_lines)
 
         chunks: list[CodeElement] = []
         for start in range(0, num_lines, step):
-            # TODO: Iterate through the lines, and capture a CodeElement without a header for 
+            # Iterate through the lines, and capture a CodeElement without a header for 
             # each chunk of text of size min_lines_per_elem, every step lines.
-            pass
-
+            end = start + min_lines_per_elem
+            end = min(end, num_lines)
+            chunks.append(CodeElement(
+                header='',
+                source=source,
+                extension=extension,
+                description='',
+                text=''.join(lines[start:end]).strip()
+            ))
+            
         return chunks
     
     def parse_repo(self) -> list[CodeElement]:
