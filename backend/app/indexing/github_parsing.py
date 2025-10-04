@@ -275,6 +275,14 @@ class GitHubParser:
             )
         )
 
+        if not code_elements:
+            code_elements.append(CodeElement(
+                source=source,
+                extension=file.extension,
+                description='',
+                text=file.content.strip()
+            ))
+
         return code_elements
     
     def parse_markdown(self, file: File, min_lines_per_elem: int = 100, overlap_lines: int = 5) -> list[CodeElement]:
