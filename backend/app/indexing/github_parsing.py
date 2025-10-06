@@ -251,7 +251,7 @@ class GitHubParser:
                             source=source,
                             extension=file.extension,
                             description='',
-                            text=''.join(previous_text).strip()
+                            text=''.join(previous_text[:200]).strip()
                         )
                     )
                     previous_text = []

@@ -11,7 +11,7 @@ class File(BaseModel):
 class CodeElement(BaseModel):
     text: str
     source: str
-    header: str
+    header: str | None = None
     extension: str
     description: str | None = None
 
