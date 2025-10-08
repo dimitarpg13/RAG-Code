@@ -2,3 +2,4 @@ articles/Forget_RAG_the_Future_is_RAG-Fusion_by_Adrian_Raudaschl_TDS_2023.pdf fi
 articles/Summarization-Based_Document_IDs_for_Generative_Retrieval_with_Language_Models_Li_2024.pdf filter=lfs diff=lfs merge=lfs -text
 articles/From_Local_to_Global-A_Graph_RAG_Approach_to_Query-Focused_Summarization_Edge_2024.pdf filter=lfs diff=lfs merge=lfs -text
 articles/ARAGOG-Advanced_RAG_Output_Grading_Elbich_2024.pdf filter=lfs diff=lfs merge=lfs -text
+articles/ARES-An_Automated_Evaluation_Framework_for_Retrieval-Augmented_Generation_Systems_Saad-Falcon_2024.pdf filter=lfs diff=lfs merge=lfs -text
