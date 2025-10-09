@@ -28,6 +28,17 @@ class DocumentType(BaseModel):
 
 class Indexer:
 
+    # take the code element -> summarize
+    # summary -> embed it
+    # index the data with vector representation of the summary
+    # ignore sparse encoding for now
+
+    # search function
+    # - filter search (ignore)
+    # - rerank the results
+
+
+
     def __init__(self, owner, repo, ref, namespace) -> None:
         
         # TODO: Create a namespace for the repo. Namespaces can use alphanumeric and dash '-' characters.
