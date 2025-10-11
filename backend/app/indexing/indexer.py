@@ -316,7 +316,8 @@ class Indexer:
         
         # TODO: Create a namespace for the repo. Namespaces can use alphanumeric and dash '-' characters.
         self.namespace = None
-        if not pinecone_client.has_index(INDEX_NAME):
+        #TODO: declare pinecone_client
+        #if not pinecone_client.has_index(INDEX_NAME):
             # TODO: if the index does not exist, use the pinecone_client.create_index function to create it. 
             # - Even if we use hybrid search, we will need to define the vector_type as "dense"
             # - Pass the index name
@@ -327,7 +328,7 @@ class Indexer:
             # To recover the cosine similarity metric, we will need to normalize the vectors and use 
             # the "dotproduct" as the default similarity metric (in the metric argument).
             # - Pass spec=ServerlessSpec(cloud="aws", region="us-east-1").
-            pass
+        #    pass
 
         # TODO:  Instantiate the Pinecone index using the Index class.
         self.index = None
