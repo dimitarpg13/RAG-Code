@@ -347,7 +347,7 @@ class Indexer:
             Returns None on API errors (logs exception to stdout).
         """
 
-        # TODO: Create the messages that will be passed to the input argument. 
+        # Create the messages that will be passed to the input argument. 
         # The messages are a list of messages. A message is a dictionary with a role 
         # ("system", "assistant", "user", "tool") and a content (the text of the message). For example:
         #   {'role': 'system', 'content': SYSTEM_PROMPT}``
@@ -356,17 +356,29 @@ class Indexer:
         # For the CodeElement message, you can use the role user. For the text of the message,
         #  you can dump the text of a Pydantic model by using:
         # `code_element.model_dump_json(indent=2, exclude_none=True)``
-        messages = []
+        messages = [
+            {
+                'role': 'system',
+                'content': SYSTEM_PROMPT
+            },
+            {'role': 'user', 'content': code_element.model_dump_json(indent=2, exclude_none=True)}
+        ]
 
         try: 
-            # TODO: In async_openai_client.responses.create, choose a model (e.g. model='gpt-4.1-nano'), 
+            # In async_openai_client.responses.create, choose a model (e.g. model='gpt-4.1-nano'), 
             # and pass the messages to the input argument. I like 'gpt-4.1-nano' as it is cheap and fast. 
             # You can pass a temperature to the temperature argument. I like to choose temperature=0.1, 
             # to get close to deterministic results, but to allow the LLM not to be stuck in local minima.
-            response = await async_openai_client.responses.create(...)
+            response = await async_openai_client.responses.create(
+                model='gpt-4.1-nano',
+                input=messages,
+                temperature=0.1,
+                timeout=60,
+            )
             return response.output_text
         except Exception as e:
             logger.error(f"Problem with summarizing: {str(e)}")
+            return None
 
     async def summarize_batch(self, code_elements: list[CodeElement]) -> list[CodeElement]:
         """Generate AI summaries for a batch of code elements concurrently.
