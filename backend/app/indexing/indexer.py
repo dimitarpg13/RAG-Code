@@ -396,12 +396,22 @@ class Indexer:
             Modifies input objects in-place by setting their description attribute.
         """
 
-        # TODO: Create a list of tasks for all the code_elements using the create_task function. 
+        # Create a list of tasks for all the code_elements using the create_task function. 
         # Await the response from all those tasks using the gather function.
-        tasks = []
-        descriptions = None
-        # TODO: For all the retrieved descriptions, assign the text of the description 
+
+        tasks = [ 
+            asyncio.create_task(self.summarize_element(element))
+            for element in code_elements 
+        ]
+        descriptions = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # For all the retrieved descriptions, assign the text of the description 
         # to the description parameter in the related CodeElement instance.
+
+        for element, description in zip(code_elements, descriptions):
+            if isinstance(description, str):
+                element.description = description
+
         return code_elements
     
     async def summarize_all(self, code_elements: list[CodeElement], batch_size: int = 1000) -> list[CodeElement]:
@@ -419,8 +429,11 @@ class Indexer:
             Each batch is processed concurrently using summarize_batch().
             Modifies input objects in-place by setting their description attribute.
         """
-        # TODO: Implement summarize_all. Iterate through batches of size
+        # Implement summarize_all. Iterate through batches of size
         # batch_size and call summarize_batch for each batch.
+        for i in range(0, len(code_elements), batch_size):
+            batch = code_elements[i: i + batch_size]
+            await self.summarize_batch(batch)
         return code_elements
     
     async def embed_batch(self,  batch: list[CodeElement]) -> list[list[float]]:
@@ -438,6 +451,10 @@ class Indexer:
         """
         # TODO: Implement the embed_batch function by using the 
         # embeddings.create function with the description of the CodeElement
+        async_openai_client.embeddings.create(
+            model='text-embedding-3-small',
+            input=[element.description for element in batch]
+        )
         raise NotImplemented
     
     async def embed_all(self, code_elements: list[CodeElement], batch_size: int = 1000) -> list[list[float]]:
