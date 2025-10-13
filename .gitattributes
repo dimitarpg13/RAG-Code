@@ -4,3 +4,4 @@ articles/From_Local_to_Global-A_Graph_RAG_Approach_to_Query-Focused_Summarizatio
 articles/ARAGOG-Advanced_RAG_Output_Grading_Elbich_2024.pdf filter=lfs diff=lfs merge=lfs -text
 articles/ARES-An_Automated_Evaluation_Framework_for_Retrieval-Augmented_Generation_Systems_Saad-Falcon_2024.pdf filter=lfs diff=lfs merge=lfs -text
 articles/RL/Offline_Reinforcement_Learning-Tutorial_Review_and_Perspectives_on_Open_Problems_Levine_2020.pdf filter=lfs diff=lfs merge=lfs -text
+articles/embeddings/BERT-Pre-training_of_Deep_Bidirectional_Transformers_for_Language_Understanding_Devlin_2019.pdf filter=lfs diff=lfs merge=lfs -text
