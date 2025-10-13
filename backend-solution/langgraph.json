@@ -1,0 +1,11 @@
+{
+    "dependencies": ["."],
+    "graphs": {
+      "chat_agent": "./app/chat/agents/chat_agent/agent.py:chat_agent",
+      "basic_rag": "./app/chat/agents/basic_rag/agent.py:basic_chat_agent",
+      "retriever_agent": "./app/chat/agents/retrieval_agent/agent.py:retrieval_agent",
+      "generator_agent": "./app/chat/agents/generation_agent/agent.py:generator_agent"
+    },
+    "env": ".env",
+    "image_distro": "wolfi"
+  }
