@@ -5,3 +5,4 @@ articles/ARAGOG-Advanced_RAG_Output_Grading_Elbich_2024.pdf filter=lfs diff=lfs 
 articles/ARES-An_Automated_Evaluation_Framework_for_Retrieval-Augmented_Generation_Systems_Saad-Falcon_2024.pdf filter=lfs diff=lfs merge=lfs -text
 articles/RL/Offline_Reinforcement_Learning-Tutorial_Review_and_Perspectives_on_Open_Problems_Levine_2020.pdf filter=lfs diff=lfs merge=lfs -text
 articles/embeddings/BERT-Pre-training_of_Deep_Bidirectional_Transformers_for_Language_Understanding_Devlin_2019.pdf filter=lfs diff=lfs merge=lfs -text
+articles/embeddings/GloVe-Global_Vectors_for_Word_Representation_Pennington_2014.pdf filter=lfs diff=lfs merge=lfs -text
