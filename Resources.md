@@ -6,6 +6,12 @@
 
 [The RAG Obituary: Killed by Agents, Buried by Context Windows, Nicolas Bustamante's blog, Oct 1th, 2025](https://www.nicolasbustamante.com/p/the-rag-obituary-killed-by-agents)
 
+### Embeddings
+
+[Distributed Representations of Words and Phrases and their Compositionality, Thomas Mikolov et al, Google, 2013](https://github.com/dimitarpg13/github-semantic-search/blob/main/articles/embeddings/Distributed_Representations_of_Words%20and_Phrases_and_their_Compositionality_Mikolov_2013.pdf)
+
+[Efficient Estimation of Word Representations in Vector Space, Thomas Mikolov et al, Google, 2013](https://github.com/dimitarpg13/github-semantic-search/blob/main/articles/embeddings/Efficient_Estimation_of_Word_Representations_in_Vector_Space_Mikolov_2013.pdf)
+
 ### Indexing Technqiues and related Algorithms
 
 [Summarization-Based Document IDs for Generative Retrieval with Language Models, Alan Li et al, 2024](https://github.com/dimitarpg13/github-semantic-search/blob/main/articles/Summarization-Based_Document_IDs_for_Generative_Retrieval_with_Language_Models_Li_2024.pdf)
